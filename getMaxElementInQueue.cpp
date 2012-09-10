@@ -48,7 +48,7 @@ private:
 };
 
 const int MAXN = 100;
-//以最大堆来维护队列中的元素
+//以最大堆来维护队列中的元素(法一)
 class heap {
 public:
 	heap() { currentNum = 0;}
@@ -57,10 +57,8 @@ public:
 		int child = 2*i+1;
 		int temp = queue[current];
 		while(child < currentNum) {
-			if (child+1 < currentNum && queue[child] < queue[child+1]){
-				child += 1;
-			}
-
+			if (child+1 < currentNum && queue[child] < queue[child+1])   child += 1;
+	
 			if ( queue[current] > queue[child]) break;
 			else {
 				queue[current] = queue[child];
@@ -121,6 +119,58 @@ private:
 	int queue[100];
 };
 
+//用最大堆来维护队列（法二）
+class HeapNode {
+public:
+	int data;
+	int pos;
+	HeapNode() { data = -1; pos = -1;}
+};
+
+class HeapQueue{
+public:
+	HeapQueue() { head = 0; currentNum = 0; }
+	void EnQueue(int val) {
+		node[currentNum].data =val;
+		node[currentNum].pos = currentNum;
+		++currentNum;
+		FileterDown(0);
+	}
+
+	void DeQueue() {
+		for(int i=0; i<currentNum; i++) {
+			if(node[i].pos == head) {
+				node[i] = node[currentNum-1];
+				head++;  --currentNum;
+				break;
+			}
+		}
+
+		FileterDown(0);
+	}
+
+	void FileterDown(int n) {
+		int current = n; int child = 2*n+1;
+		HeapNode temp = node[n];
+		while(child < currentNum) {
+			if(child+1 < currentNum && node[child].data < node[child+1].data)  child += 1;
+
+			if (node[child].data <= node[current].data) break;
+			else {
+				node[current] = node[child];
+				current = child;
+				child = child*2 +1;
+			}
+		}
+
+		node[current] = temp;
+	}
+	int MaxElement() { return node[0].data; }
+private:
+	HeapNode node[20];
+	int head;
+	int currentNum;
+};
 
 //用堆栈来实现队列
 
@@ -215,7 +265,7 @@ int main() {
 	maxNum = queue.MaxElement();
 	cout<<"最大值："<<maxNum<<endl;
 
-	//以最大堆来实现的
+	////以最大堆来实现的（法一）
 	getchar();
 	cin.clear();
 	queueHeap hqueue;
@@ -228,8 +278,25 @@ int main() {
 	maxNum = hqueue.MaxElement();
 	cout<<"最大值："<<maxNum<<endl;
 
-	 hqueue.DeQueue();
+	hqueue.DeQueue();
 	maxNum = hqueue.MaxElement();
+	cout<<"最大值："<<maxNum<<endl;
+
+	//以最大堆来实现的（法二）
+	getchar();
+	cin.clear();
+	HeapQueue Queuennode;
+	int element2;
+	cout<<" 请输入队列中的值：";
+	while(cin>>element2) {
+		Queuennode.EnQueue(element2);
+	}
+
+		maxNum = Queuennode.MaxElement();
+	cout<<"最大值："<<maxNum<<endl;
+
+	Queuennode.DeQueue();
+	maxNum = Queuennode.MaxElement();
 	cout<<"最大值："<<maxNum<<endl;
 
 	//以堆栈来实现
