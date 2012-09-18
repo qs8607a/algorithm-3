@@ -72,9 +72,11 @@ void BinaryTree::preOrder(node *root) {
 void BinaryTree::BFS() {
 //用队列来实现广度优先搜索树
 //难点在于如何在一层结束后，实现换行
+//利用的是在每行结束时增加一个哨兵
 
 	deque<node*> Queue;
 	
+	//行结束符
 	node *q  = new node();
 
 	Queue.push_back(root);
