@@ -21,7 +21,7 @@ public:
 	int data;
 	node *pLeft;
 	node *pRight;
-	node(int d = 0):data(d),pLeft(NULL),pRight(NULL){}
+	node(int d = -1):data(d),pLeft(NULL),pRight(NULL){}
 };
  class BinaryTree {
  public:
@@ -69,16 +69,29 @@ void BinaryTree::preOrder(node *root) {
 	 if(root->pRight != NULL) preOrder(root->pRight);
 }
 
-void	BinaryTree::BFS() {
+void BinaryTree::BFS() {
+//用队列来实现广度优先搜索树
+//难点在于如何在一层结束后，实现换行
 
 	deque<node*> Queue;
+	
+	node *q  = new node();
+
 	Queue.push_back(root);
+	Queue.push_back(q);
 	while (!Queue.empty()) {
 		node *p = Queue.front();
-		cout<<setw(4)<<p->data;
 		Queue.pop_front();
+		if(p->data == -1 && p->pLeft == NULL && p->pLeft == p->pRight  ){
+			if(!Queue.empty()) Queue.push_back(q);
+
+			cout<<endl;continue; 
+		}
+		cout<<setw(4)<<p->data;
+		
 		if(p->pLeft != NULL) Queue.push_back(p->pLeft);
 		if (p->pRight != NULL) Queue.push_back(p->pRight);
+		
 	}
 }
 
@@ -91,7 +104,7 @@ int main() {
 	tree.preOrder();
 	cout<<endl;
 
-	cout<<"层次遍历：";
+	cout<<"层次遍历："<<endl;
 	tree.BFS();
 	cout<<endl;
 
